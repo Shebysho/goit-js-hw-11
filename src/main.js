@@ -52,3 +52,16 @@ searchForm.addEventListener('submit', async (event) => {
     loader.classList.add('hidden');
   }
 });
+loader.classList.remove('hidden');
+
+try {
+  const { hits, totalHits } = await fetchImages(query, currentPage);
+
+} catch (error) {
+
+} finally {
+  loader.classList.add('hidden');
+}
+
+gallery.innerHTML = '';
+renderGallery(hits);
