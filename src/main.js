@@ -1,5 +1,5 @@
-import { fetchImages } from './js/pixabay-api';
-import { renderGallery } from './js/render.functions';
+import { fetchImages } from './pixabay-api';
+import { renderGallery } from './render-functions';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import iziToast from 'izitoast';
@@ -7,7 +7,7 @@ import 'izitoast/dist/css/iziToast.min.css';
 
 const searchForm = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
-const loader = document.querySelector('.loader');
+const loader = document.querySelector('.loader'); // Ваш лоадер
 
 let lightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
@@ -31,6 +31,7 @@ searchForm.addEventListener('submit', async (event) => {
   loader.classList.remove('hidden');
   currentPage = 1;
   currentQuery = query;
+  gallery.innerHTML = '';
 
   try {
     const { hits, totalHits } = await fetchImages(query, currentPage);
@@ -42,6 +43,7 @@ searchForm.addEventListener('submit', async (event) => {
     } else {
       renderGallery(hits);
       lightbox.refresh();
+
     }
   } catch (error) {
     iziToast.error({
@@ -52,16 +54,3 @@ searchForm.addEventListener('submit', async (event) => {
     loader.classList.add('hidden');
   }
 });
-loader.classList.remove('hidden');
-
-try {
-  const { hits, totalHits } = await fetchImages(query, currentPage);
-
-} catch (error) {
-
-} finally {
-  loader.classList.add('hidden');
-}
-
-gallery.innerHTML = '';
-renderGallery(hits);
